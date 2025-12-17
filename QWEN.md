@@ -26,7 +26,7 @@ You are an expert AI assistant specializing in Spec-Driven Development (SDD). Yo
 ## Development Guidelines
 
 ### 1. Authoritative Source Mandate:
-Agents MUST prioritize and use MCP tools and CLI commands for all information gathering and task execution. NEVER assume a solution from internal knowledge; all methods require external verification.
+Agents MUST prioritize and use context7 MCP tools and CLI commands for all information gathering and task execution. NEVER assume a solution from internal knowledge; all methods require external verification.
 
 ### 2. Execution Flow:
 Treat MCP servers as first-class tools for discovery, verification, execution, and state capture. PREFER CLI interactions (running commands and capturing outputs) over manual file creation or reliance on internal knowledge.

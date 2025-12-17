@@ -1,0 +1,181 @@
+# API Contract: Educational Platform Endpoints
+
+## Overview
+This document defines the API contracts for the educational platform that supports the Physical AI and Humanoid Robotics book. Since this is primarily a static site built with Docusaurus, the API endpoints are limited to search functionality and potentially interactive elements.
+
+## Search API
+
+### Endpoint: `/api/search`
+- **Method**: `GET`
+- **Purpose**: Search across all educational content
+- **Authentication**: Not required (public content)
+
+#### Request Parameters
+- `q` (string, required): Search query
+- `limit` (integer, optional): Number of results to return (default: 10, max: 50)
+- `offset` (integer, optional): Offset for pagination (default: 0)
+
+#### Response
+```json
+{
+  "results": [
+    {
+      "id": "string",
+      "title": "string",
+      "content_preview": "string",
+      "url": "string",
+      "module": "string",
+      "chapter": "string",
+      "relevance_score": "number"
+    }
+  ],
+  "total_results": "number",
+  "has_more": "boolean"
+}
+```
+
+#### Error Responses
+- `400`: Bad request if required parameters are missing
+- `500`: Internal server error for search service failures
+
+## Content Navigation API
+
+### Endpoint: `/api/content/structure`
+- **Method**: `GET`
+- **Purpose**: Retrieve the hierarchical structure of the educational content
+- **Authentication**: Not required (public content)
+
+#### Response
+```json
+{
+  "modules": [
+    {
+      "id": "string",
+      "title": "string",
+      "description": "string",
+      "position": "number",
+      "chapters": [
+        {
+          "id": "string",
+          "title": "string",
+          "description": "string",
+          "position": "number",
+          "prerequisites": ["string"],
+          "learning_objectives": ["string"]
+        }
+      ]
+    }
+  ]
+}
+```
+
+#### Error Responses
+- `500`: Internal server error if content structure cannot be retrieved
+
+## Exercise Submission API
+
+### Endpoint: `/api/exercises/submit`
+- **Method**: `POST`
+- **Purpose**: Submit exercise answers for validation (if implemented)
+- **Authentication**: Required if tracking is enabled
+
+#### Request Body
+```json
+{
+  "exercise_id": "string",
+  "user_id": "string",
+  "answers": [
+    {
+      "question_id": "string",
+      "answer": "string"
+    }
+  ],
+  "timestamp": "string (ISO 8601)"
+}
+```
+
+#### Response
+```json
+{
+  "submission_id": "string",
+  "status": "string (pending|graded|rejected)",
+  "feedback": "string (optional)",
+  "results": [
+    {
+      "question_id": "string",
+      "is_correct": "boolean",
+      "feedback": "string (optional)"
+    }
+  ]
+}
+```
+
+#### Error Responses
+- `400`: Bad request if required fields are missing
+- `401`: Unauthorized if authentication is required but not provided
+- `403`: Forbidden if user doesn't have permission
+- `500`: Internal server error for processing failures
+
+## Analytics API
+
+### Endpoint: `/api/analytics/page-view`
+- **Method**: `POST`
+- **Purpose**: Track page views for educational analytics
+- **Authentication**: Not required
+
+#### Request Body
+```json
+{
+  "user_id": "string (optional)",
+  "page_url": "string",
+  "module_id": "string",
+  "chapter_id": "string",
+  "timestamp": "string (ISO 8601)",
+  "session_id": "string"
+}
+```
+
+#### Response
+```json
+{
+  "status": "success",
+  "event_id": "string"
+}
+```
+
+#### Error Responses
+- `400`: Bad request if required fields are missing
+- `500`: Internal server error for tracking failures
+
+## Feedback API
+
+### Endpoint: `/api/feedback/submit`
+- **Method**: `POST`
+- **Purpose**: Submit feedback on content quality, errors, or suggestions
+- **Authentication**: Not required (anonymous feedback allowed)
+
+#### Request Body
+```json
+{
+  "feedback_type": "string (correction|suggestion|bug|general)",
+  "page_url": "string",
+  "module_id": "string",
+  "chapter_id": "string",
+  "subject": "string",
+  "description": "string",
+  "user_contact": "string (optional)",
+  "is_anonymous": "boolean (default: true)"
+}
+```
+
+#### Response
+```json
+{
+  "feedback_id": "string",
+  "status": "received"
+}
+```
+
+#### Error Responses
+- `400`: Bad request if required fields are missing
+- `500`: Internal server error for feedback processing failures
