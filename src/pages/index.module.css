@@ -1,0 +1,203 @@
+/**
+ * CSS files with the .module.css suffix will be treated as CSS modules
+ * and scoped locally.
+ */
+
+/* Define color palette as CSS variables */
+:root {
+  --color-main-background: #FFFFFF;
+  --color-main-foreground: #F9FBFC;
+  --color-main-primary: #F5A3B7;
+  --color-main-secondary: #B0A6BD;
+  --color-text-primary: #383838;
+  --color-text-secondary: #697586;
+  --footer-bg-color: #2b3445; /* Blue-grey footer color */
+  --banner-bg-color: #4CAF50; /* Greenish color that matches blue-grey */
+  --banner-text-color: #333333; /* Black heading */
+  --banner-subtext-color: #CCCCCC; /* Light grey text */
+  --button-bg-color: #4CAF50; /* Green background for buttons */
+  --button-text-color: #FFFFFF; /* White text for buttons */
+}
+
+/* Set dark mode background color for the entire landing page */
+html[data-theme='dark'] {
+  --color-main-background: #2C2C2C;
+}
+
+body[data-theme='dark'] {
+  background-color: #2C2C2C !important;
+}
+
+/* Make sure the landing page sections have the dark background */
+html[data-theme='dark'] .main-wrapper,
+html[data-theme='dark'] .container,
+html[data-theme='dark'] .theme-doc-markdown {
+  background-color: #2C2C2C !important;
+}
+
+html[data-theme='dark'] .heroBanner,
+html[data-theme='dark'] .modules {
+  background-color: #2C2C2C;
+}
+
+.heroBanner {
+  padding: 4rem 0;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #7F8CAA 0%, #606e94 100%); /* New blue-purple gradient */
+  background-color: var(--color-main-background);
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+@media screen and (max-width: 996px) {
+  .heroBanner {
+    padding: 2rem;
+  }
+}
+
+/* Update heading and subtext colors in banner */
+.heroBanner h1 {
+  color: white; /* White heading */
+}
+
+.heroBanner p {
+  color: white; /* White text */
+}
+
+.buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Update buttons to have green background and white text */
+.buttons .button,
+.card .button {
+  background-color: var(--button-bg-color) !important; /* Green background */
+  color: var(--button-text-color) !important; /* White text */
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.buttons .button:hover,
+.card .button:hover {
+  background-color: #45a049 !important; /* Darker green on hover */
+  opacity: 0.9;
+  transform: scale(1.05);
+  text-decoration: none;
+}
+
+.modules {
+  padding: 4rem 0;
+  background-color: var(--color-main-foreground);
+}
+
+.modules h2 {
+  text-align: center;
+  margin-bottom: 3rem;
+  color: var(--color-text-primary);
+}
+
+.modules p {
+  text-align: center;
+  margin-bottom: 3rem;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+  color: var(--color-text-secondary);
+}
+
+/* Enhanced card styling */
+.card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-main-background);
+  border: 1px solid var(--color-main-secondary);
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(176, 166, 189, 0.3); /* Using secondary color for shadow */
+  transition: all 0.3s ease;
+  cursor: pointer;
+  min-height: 400px;
+  position: relative;
+  overflow: hidden;
+}
+
+.card:hover {
+  transform: scale(1.03);
+  box-shadow: 0 10px 20px rgba(245, 163, 183, 0.4); /* Using primary color for shadow on hover */
+  border-color: var(--color-main-primary);
+}
+
+/* Additional card enhancements for color consistency */
+.card h3 {
+  color: var(--color-text-primary);
+  position: relative;
+  padding-bottom: 0.75rem;
+}
+
+.card h3::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--color-main-primary), transparent);
+}
+
+.card .card__body {
+  padding: 1.5rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.card .card__footer {
+  padding: 1rem 1.5rem;
+  margin-top: auto;
+  border-top: 1px solid var(--color-main-foreground);
+  background-color: var(--color-main-foreground);
+}
+
+.card ul {
+  padding-left: 1.2rem;
+  margin-bottom: 1rem;
+  flex-grow: 1;
+}
+
+.card ul li {
+  margin-bottom: 0.5rem;
+  line-height: 1.4;
+  color: var(--color-text-secondary);
+}
+
+.card h3 {
+  margin-top: 0;
+  color: var(--color-text-primary);
+}
+
+.card p {
+  color: var(--color-text-secondary);
+  margin-bottom: 1rem;
+}
+
+/* Ensure all cards have consistent height */
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 -1rem;
+}
+
+.row > [class*="col"] {
+  padding: 0 1rem;
+  margin-bottom: 2rem;
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 996px) {
+  .row > [class*="col"] {
+    margin-bottom: 1.5rem;
+  }
+}

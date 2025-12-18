@@ -1,299 +1,98 @@
 ---
-title: "Chapter 3: Communication Patterns (Topics, Services, Actions)"
-description: "Understanding the three primary communication patterns in ROS 2: topics, services, and actions"
-keywords: [ROS 2, topics, services, actions, communication patterns, message passing]
-sidebar_position: 4
+title: "Chapter 3: ROS 2 Tools and Debugging"
+description: "Using ROS 2 tools for development, debugging, and visualization"
+keywords: [ROS 2, tools, debugging, visualization, rqt, ros2cli]
+sidebar_position: 3
 ---
 
-# Chapter 3: Communication Patterns (Topics, Services, Actions)
+# Chapter 3: ROS 2 Tools and Debugging
 
 ## Learning Objectives
-By the end of this chapter, you will be able to:
-1. Implement publishers and subscribers using topics for asynchronous communication
-2. Create and use services for synchronous request-response communication
-3. Design and implement actions for long-running tasks with feedback
-4. Apply Quality of Service (QoS) settings appropriately for different communication needs
-5. Choose the appropriate communication pattern for different robotic scenarios
+
+By the end of this chapter, students will be able to:
+1. Use ROS 2 command-line tools for system introspection
+2. Utilize visualization tools like rqt for debugging
+3. Monitor and analyze node communication
+4. Troubleshoot common ROS 2 issues
 
 ## Prerequisites
-Before starting this chapter, you should have:
-- Understanding of ROS 2 fundamentals and nodes (Chapter 1)
-- Knowledge of creating and managing ROS 2 packages (Chapter 2)
-- Basic understanding of asynchronous vs synchronous communication
+
+Before starting this chapter, students should have:
+- ROS 2 architecture knowledge (Chapter 1)
+- Node, topic, and service understanding (Chapter 2)
+- Command-line interface proficiency
 
 ## Core Concepts
 
-### Topics - Publish/Subscribe Pattern
-Topics enable asynchronous, one-way communication between nodes. Publishers send messages to topics, and subscribers receive messages from topics. This pattern is ideal for continuous data streams like sensor readings, robot states, or control commands.
+### ROS 2 Command-Line Interface (CLI)
 
-**Key Features:**
-- Asynchronous communication
-- Multiple publishers/subscribers per topic
-- Message buffering with configurable history
-- Quality of Service (QoS) settings for reliability
+ROS 2 provides a comprehensive set of command-line tools for interacting with and debugging ROS systems:
 
-### Services - Request/Response Pattern
-Services provide synchronous, two-way communication. A client sends a request to a service server, which processes the request and returns a response. This pattern is suitable for operations that require immediate responses, like configuration changes or simple computations.
+- `ros2 run`: Run executables in packages
+- `ros2 node`: List and info about nodes
+- `ros2 topic`: List and info about topics
+- `ros2 service`: List and info about services
+- `ros2 param`: Get, set, and list parameters
+- `ros2 action`: List and info about actions
 
-**Key Features:**
-- Synchronous communication
-- Request-response model
-- One client per service call
-- Error handling and timeouts
+### Visualization Tools
 
-### Actions - Long-Running Tasks with Feedback
-Actions combine features of topics and services to handle long-running tasks. They allow clients to send goals to action servers, receive feedback during execution, and get results when complete. This pattern is perfect for navigation, manipulation, or calibration tasks.
-
-**Key Features:**
-- Goal-feedback-result pattern
-- Cancelable operations
-- Asynchronous execution
-- Continuous feedback
+rqt is a Qt-based framework for GUI plugins in ROS. It provides various tools for visualizing and debugging ROS systems including:
+- Topic monitoring
+- Node graph visualization
+- Message inspection
+- Plotting capabilities
 
 ## Implementation
 
-### Using Topics with Custom QoS Settings
-Implementing a publisher with specific QoS requirements:
+Using ROS 2 command-line tools:
 
-```python
-import rclpy
-from rclpy.node import Node
-from std_msgs.msg import String
-from rclpy.qos import QoSProfile, QoSHistoryPolicy, QoSReliabilityPolicy, QoSDurabilityPolicy
+```bash
+# List all active nodes
+ros2 node list
 
-class QoSPublisher(Node):
+# Get info about a specific node
+ros2 node info /node_name
 
-    def __init__(self):
-        super().__init__('qos_publisher')
-        
-        # Create a QoS profile with specific settings
-        qos_profile = QoSProfile(
-            depth=10,  # Keep the 10 most recent messages
-            history=QoSHistoryPolicy.KEEP_LAST,
-            reliability=QoSReliabilityPolicy.RELIABLE,  # Ensure all messages are received
-            durability=QoSDurabilityPolicy.VOLATILE  # Transient messages
-        )
-        
-        self.publisher = self.create_publisher(String, 'qos_topic', qos_profile)
-        timer_period = 0.5
-        self.timer = self.create_timer(timer_period, self.timer_callback)
-        self.i = 0
+# Echo messages on a topic
+ros2 topic echo /topic_name std_msgs/msg/String
 
-    def timer_callback(self):
-        msg = String()
-        msg.data = f'Hello QoS: {self.i}'
-        self.publisher.publish(msg)
-        self.get_logger().info(f'Publishing: "{msg.data}"')
-        self.i += 1
+# Call a service
+ros2 service call /service_name std_srvs/srv/Empty
 
-def main(args=None):
-    rclpy.init(args=args)
-    qos_publisher = QoSPublisher()
-    rclpy.spin(qos_publisher)
-    qos_publisher.destroy_node()
-    rclpy.shutdown()
+# List all parameters of a node
+ros2 param list /node_name
 
-if __name__ == '__main__':
-    main()
+# Get parameter value
+ros2 param get /node_name parameter_name
 ```
 
-### Creating a Service Server
-Implementing a service for simple calculations:
-
-```python
-from rclpy.node import Node
-from rclpy.qos import QoSProfile
-from example_interfaces.srv import AddTwoInts
-
-class MinimalService(Node):
-
-    def __init__(self):
-        super().__init__('minimal_service')
-        self.srv = self.create_service(AddTwoInts, 'add_two_ints', self.add_two_ints_callback)
-
-    def add_two_ints_callback(self, request, response):
-        response.sum = request.a + request.b
-        self.get_logger().info(f'Returning {response.sum}')
-        return response
-
-def main(args=None):
-    rclpy.init(args=args)
-    minimal_service = MinimalService()
-    rclpy.spin(minimal_service)
-    minimal_service.destroy_node()
-    rclpy.shutdown()
-
-if __name__ == '__main__':
-    main()
-```
+**What these commands do**: Provide system introspection capabilities to understand the state of your ROS network.
+**Why this works**: These tools interact with the ROS 2 middleware to retrieve information about the runtime system.
 
 ## Examples
 
-### Example: Action Server for Navigation
-Implementing a navigation action that provides feedback during execution:
+### Example 1: Node Communication Analysis
+- Use `ros2 node info` to see what topics a node publishes/subscribes to
+- Monitor topic data with `ros2 topic echo`
+- Analyze message rates and types
 
-```python
-import time
-import rclpy
-from rclpy.action import ActionServer, CancelResponse, GoalResponse
-from rclpy.node import Node
-from rcl_interfaces.action import Fibonacci
-
-class FibonacciActionServer(Node):
-
-    def __init__(self):
-        super().__init__('fibonacci_action_server')
-        self._action_server = ActionServer(
-            self,
-            Fibonacci,
-            'fibonacci',
-            execute_callback=self.execute_callback,
-            callback_group=rclpy.callback_groups.ReentrantCallbackGroup(),
-            goal_callback=self.goal_callback,
-            cancel_callback=self.cancel_callback)
-
-    def destroy(self):
-        self._action_server.destroy()
-        super().destroy_node()
-
-    def goal_callback(self, goal_request):
-        self.get_logger().info('Received goal request')
-        return GoalResponse.ACCEPT
-
-    def cancel_callback(self, goal_handle):
-        self.get_logger().info('Received cancel request')
-        return CancelResponse.ACCEPT
-
-    async def execute_callback(self, goal_handle):
-        self.get_logger().info('Executing goal...')
-        
-        feedback_msg = Fibonacci.Feedback()
-        feedback_msg.sequence = [0, 1]
-        
-        for i in range(1, goal_handle.request.order):
-            # Check if there's a cancel request
-            if goal_handle.is_cancel_requested:
-                goal_handle.canceled()
-                self.get_logger().info('Goal canceled')
-                return Fibonacci.Result()
-            
-            feedback_msg.sequence.append(
-                feedback_msg.sequence[i] + feedback_msg.sequence[i-1])
-            
-            self.get_logger().info(f'Publishing feedback: {feedback_msg.sequence}')
-            goal_handle.publish_feedback(feedback_msg)
-            time.sleep(1)
-        
-        goal_handle.succeed()
-        result = Fibonacci.Result()
-        result.sequence = feedback_msg.sequence
-        self.get_logger().info(f'Returning result: {result.sequence}')
-        return result
-
-def main(args=None):
-    rclpy.init(args=args)
-    action_server = FibonacciActionServer()
-    
-    try:
-        rclpy.spin(action_server)
-    except KeyboardInterrupt:
-        pass
-    finally:
-        action_server.destroy()
-        rclpy.shutdown()
-
-if __name__ == '__main__':
-    main()
-```
-
-### Example: Action Client for Navigation
-A client that sends navigation goals and receives feedback:
-
-```python
-import time
-import rclpy
-from rclpy.action import ActionClient
-from rclpy.node import Node
-from rcl_interfaces.action import Fibonacci
-
-class FibonacciActionClient(Node):
-
-    def __init__(self):
-        super().__init__('fibonacci_action_client')
-        self._action_client = ActionClient(
-            self,
-            Fibonacci,
-            'fibonacci')
-
-    def send_goal(self, order):
-        goal_msg = Fibonacci.Goal()
-        goal_msg.order = order
-
-        self._action_client.wait_for_server()
-        self.get_logger().info('Sending goal request...')
-
-        send_goal_future = self._action_client.send_goal_async(
-            goal_msg,
-            feedback_callback=self.feedback_callback)
-        
-        send_goal_future.add_done_callback(self.goal_response_callback)
-
-    def goal_response_callback(self, future):
-        goal_handle = future.result()
-        if not goal_handle.accepted:
-            self.get_logger().info('Goal rejected :(')
-            return
-
-        self.get_logger().info('Goal accepted :)')
-        
-        get_result_future = goal_handle.get_result_async()
-        get_result_future.add_done_callback(self.get_result_callback)
-
-    def get_result_callback(self, future):
-        result = future.result().result
-        self.get_logger().info(f'Result: {result.sequence}')
-        rclpy.shutdown()
-
-    def feedback_callback(self, feedback_msg):
-        feedback = feedback_msg.feedback
-        self.get_logger().info(f'Received feedback: {feedback.sequence}')
-
-def main(args=None):
-    rclpy.init(args=args)
-    action_client = FibonacciActionClient()
-    action_client.send_goal(10)
-    rclpy.spin(action_client)
-
-if __name__ == '__main__':
-    main()
-```
+### Example 2: Parameter Tuning
+- List available parameters with `ros2 param list`
+- Adjust parameters during runtime with `ros2 param set`
+- Monitor parameter effects on system behavior
 
 ## Summary
-In this chapter, we explored the three primary communication patterns in ROS 2: topics, services, and actions. Each pattern serves different communication needs:
 
-- **Topics** for continuous, asynchronous data streams
-- **Services** for simple request-response interactions
-- **Actions** for long-running operations with feedback
-
-Quality of Service (QoS) settings allow fine-tuning communication behavior to meet specific requirements for reliability, durability, and history. Understanding when to use each communication pattern is crucial for designing robust and efficient robotic systems.
+ROS 2 tools are essential for developing, debugging, and maintaining robot systems. The command-line tools provide programmatic access to system information, while visualization tools like rqt offer intuitive interfaces for monitoring system behavior. Mastering these tools significantly improves development efficiency and system reliability.
 
 ## Exercises
 
-### Logical Analysis Exercise
-1. Analyze when you would use each communication pattern for different robotic components (e.g., sensors, controllers, navigation).
-2. Explain how QoS settings impact system reliability and performance in safety-critical robotic applications.
+### Logical Exercise
+Explain how you would debug a situation where nodes are not communicating as expected.
 
-### Conceptual Exploration Exercise
-1. Research and compare the QoS policies in DDS and their impact on robotic communication.
-2. Investigate how actions handle network failures and reconnections compared to services.
+### Conceptual Exercise
+Design a debugging workflow for a multi-node ROS 2 system with sensor data processing.
 
-### Implementation Practice Exercise
-1. Create a sensor node that publishes readings via topics with appropriate QoS settings for real-time performance.
-2. Implement a configuration service that allows other nodes to update operating parameters.
-3. Design an action server for robot navigation that includes progress feedback and cancellation capability.
-4. Create a scenario where a single node uses all three communication patterns to interact with different systems.
-
-## References
-1. ROS 2 Communication Patterns: https://docs.ros.org/en/rolling/Concepts/About-Topics-Services-Actions.html
-2. QoS in ROS 2: https://docs.ros.org/en/rolling/Concepts/About-Quality-of-Service-Settings.html
-3. Actions Tutorial: https://docs.ros.org/en/rolling/Tutorials/Actions/Understanding-ROS2-Actions.html
+### Implementation Exercise
+Use ROS 2 command-line tools to monitor a running system and document the communication patterns.

@@ -1,64 +1,112 @@
-# Mathematical Notation
+---
+title: Notation
+description: Mathematical and technical notation used throughout the Physical AI and Humanoid Robotics educational resource
+keywords: [notation, mathematical symbols, robotics, AI, equations]
+sidebar_position: 2
+---
 
-This document defines the mathematical symbols and notation used throughout the Physical AI and Humanoid Robotics educational resource.
+# Notation
 
-## Scalars
-- $a, b, c$ - Real numbers
-- $i, j, k$ - Integer indices
+This document defines the mathematical and technical notation used consistently throughout the Physical AI and Humanoid Robotics educational resource.
 
-## Vectors
-- $\mathbf{v}$ - Vector (bold lowercase)
-- $\mathbf{0}$ - Zero vector
-- $|\mathbf{v}|$ or $\|\mathbf{v}|_2$ - Euclidean norm of vector $\mathbf{v}$
-- $\mathbf{v}^T$ - Transpose of vector $\mathbf{v}$
+## Mathematical Operators
 
-## Matrices
-- $\mathbf{A}$ - Matrix (bold uppercase)
-- $\mathbf{I}$ - Identity matrix
-- $\mathbf{A}^{-1}$ - Inverse of matrix $\mathbf{A}$
-- $\mathbf{A}^T$ - Transpose of matrix $\mathbf{A}$
-- $\det(\mathbf{A})$ - Determinant of matrix $\mathbf{A}$
+### Scalars, Vectors, and Matrices
+- s - Scalar quantity
+- **v** - Vector quantity (bold lowercase)
+- **M** - Matrix quantity (bold uppercase)
+- ℝ - Set of real numbers
+- ℝ^n - n-dimensional real vector space
+- I_n - Identity matrix of size n×n
 
-## Sets
-- $\mathbb{R}$ - Set of real numbers
-- $\mathbb{R}^n$ - n-dimensional real vector space
-- $\mathbb{N}$ - Set of natural numbers
-- $\mathbb{Z}$ - Set of integers
-- $\mathcal{X}$ - General set (calligraphic font)
+### Calculus
+- d/dt - Ordinary derivative with respect to time
+- ∂/∂x - Partial derivative with respect to x
+- ∇ - Gradient operator
+- ∫ - Integral operator
+- ∑ - Summation operator
 
-## Functions
-- $f: \mathcal{X} \to \mathcal{Y}$ - Function $f$ mapping from set $\mathcal{X}$ to set $\mathcal{Y}$
-- $f \circ g$ - Composition of functions $f$ and $g$
-- $\nabla f$ - Gradient of function $f$
+### Set Theory
+- ∈ - "is an element of"
+- ⊂ - Subset
+- ∪ - Union
+- ∩ - Intersection
+- ∅ - Empty set
+- | or : - "such that"
 
-## Probability and Statistics
-- $P(A)$ - Probability of event $A$
-- $p(x)$ - Probability density function of random variable $x$
-- $\mathbb{E}[X]$ - Expected value of random variable $X$
-- $\text{Var}[X]$ - Variance of random variable $X$
-- $X \sim \mathcal{N}(\mu, \sigma^2)$ - Random variable $X$ follows normal distribution
-
-## Kinematics and Dynamics
-- $\mathbf{T}$ - Transformation matrix
-- $\mathbf{R}$ - Rotation matrix
-- $\mathbf{p}$ - Position vector
-- $\mathbf{v}$ - Velocity vector
-- $\mathbf{a}$ - Acceleration vector
-- $\boldsymbol{\omega}$ - Angular velocity vector
-- $\boldsymbol{\theta}$ - Joint angle vector
-- $\boldsymbol{\dot{\theta}}$ - Joint velocity vector
-- $\boldsymbol{\tau}$ - Joint torque vector
-
-## Control Theory
-- $G(s)$ - Transfer function
-- $\mathbf{A}, \mathbf{B}, \mathbf{C}, \mathbf{D}$ - State-space matrices
-- $\mathbf{x}$ - State vector
-- $\mathbf{u}$ - Control input vector
-- $\mathbf{y}$ - Output vector
+### Logic
+- ∧ - Logical AND
+- ∨ - Logical OR
+- ¬ or ∼ - Logical NOT
+- ⇒ - Logical implication
+- ⇔ - Logical equivalence
 
 ## Robotics-Specific Notation
-- $SE(3)$ - Special Euclidean group in 3D space
-- $SO(3)$ - Special Orthogonal group in 3D space
-- $\text{ad}(\cdot)$ - Adjoint operator
-- $\text{Ad}(\cdot)$ - Adjoint matrix
-- $[\cdot]_\times$ - Skew-symmetric matrix representation
+
+### Transformations
+- ᴮT_A - Transformation matrix from frame A to frame B
+- ᴮR_A - Rotation matrix from frame A to frame B
+- ᴮp - Position vector of point p expressed in frame A
+
+### Kinematics
+- θᵢ - Joint angle for joint i
+- **q** - Vector of joint variables [θ₁ θ₂ ... θₙ]ᵀ
+- **J** - Jacobian matrix
+- **x** - Task space position/orientation vector
+- **q̇** - Vector of joint velocities
+- **ẋ** - Vector of task space velocities
+
+### Dynamics
+- **M(q)** - Inertia matrix
+- **C(q, q̇)** - Coriolis and centrifugal force matrix
+- **g(q)** - Gravity vector
+- **τ** - Vector of joint torques
+- **F** - Vector of external forces
+
+### Control Theory
+- G(s) - Transfer function in Laplace domain
+- ζ - Damping ratio
+- ωₙ - Natural frequency
+- Kₚ, Kᵢ, Kd - Proportional, integral, and derivative gains
+- e(t) - Error signal
+- u(t) - Control input signal
+
+## Probability and Statistics
+- P(A) - Probability of event A
+- p(x) - Probability density function of x
+- E[X] - Expected value of random variable X
+- Var(X) - Variance of random variable X
+- x ~ N(μ, σ²) - x follows a normal distribution with mean μ and variance σ²
+- σ - Standard deviation
+
+## AI and Machine Learning
+- D - Dataset
+- x, y - Input and output variables
+- f_θ(x) - Function parameterized by θ
+- L - Loss function
+- ∇_θ L - Gradient of loss with respect to parameters
+- α - Learning rate
+- **W** - Weight matrix
+- σ(·) - Activation function (often sigmoid)
+- ReLU(x) - Rectified Linear Unit activation function max(0, x)
+
+## Computer Vision
+- I(x, y) - Intensity value at pixel location (x, y)
+- **K** - Camera intrinsic matrix
+- **R**, **t** - Camera rotation and translation
+- fₓ, fᵧ - Focal lengths in pixels
+- (cₓ, cᵧ) - Principal point coordinates
+
+## Time and Discrete Systems
+- t - Continuous time
+- k - Discrete time step
+- xₖ - State at discrete time step k
+- z⁻¹ - Unit delay operator in z-transform domain
+
+## Common Abbreviations
+- T - Transpose of a matrix or vector
+- ⁻¹ - Matrix inverse
+- † - Pseudoinverse
+- ||·|| - Norm
+- ||·||₂ - Euclidean norm
+- ||·||_F - Frobenius norm

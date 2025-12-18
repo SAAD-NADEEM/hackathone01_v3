@@ -90,6 +90,10 @@ Libraries should be those which are standard and top used in the world and widel
 
 ## Code Structure & Context7 MCP Usage
 
+- Use context7 MCP for every code and setup-related task
+- Context7 MCP is installed and SHOULD be used for installing any packages
+- Docusaurus should fully utilize CONTEXT7 MCP documentation
+
 ### XXV. Use Context7 for All Tasks
 **use context7** MCP for every code and setup related task. Agents must rely on official documentation and tools obtained through Context7 MCP rather than internal knowledge or assumptions.
 
