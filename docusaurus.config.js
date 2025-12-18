@@ -11,8 +11,8 @@ const config = {
   // Set the production url of your site here
   url: 'https://your-username.github.io', // TODO: Update with actual GitHub Pages URL
   // Set the /<baseUrl>/ pathname under which your site is served
-  // For GitHub Pages, this is usually /<project-name>/
-  baseUrl: '/hackathone01_v3/', // TODO: Update with actual project name
+  // For GitHub Pages or Vercel, this should be /
+  baseUrl: '/',
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
